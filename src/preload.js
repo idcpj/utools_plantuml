@@ -6,20 +6,27 @@ const os = require('os');
 
 const bin = path.resolve(__dirname, 'bin/plantuml.jar');
 
+
+const tempDir = os.tmpdir();
+
 const uniqueFileName = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+const new_bin = path.join(tempDir, `${uniqueFileName}.jar`);
 
-const puml = path.resolve(tempDir, `${uniqueFileName}.puml`);
 
-// const tempDir = os.tmpdir();
-// const puml = path.join(tempDir, `${uniqueFileName}.puml`);
-// const png = path.join(tempDir, `${uniqueFileName}.png`);
+const puml = path.join(tempDir, `${uniqueFileName}.puml`);
+const png = path.join(tempDir, `${uniqueFileName}.png`);
 
 try {
 
-
+    fs.copyFile(bin, new_bin, (err) => {
+        if (err) {
+            console.error(`Error moving file: ${err.message}`);
+        } else {
+            console.log(new_bin);
+        }
+    });
 
     window.render=(html,callback)=> {
-
 
         html=cleanHTML(html)
 
@@ -27,10 +34,10 @@ try {
             if (err) {
                 callback(false,`Error writing index.html: ${err}`)
             }
-        });
+        })
 
 
-        const command = `${bin}  -charset UTF-8   ${puml}`;
+        const command = `java -jar ${new_bin}  -charset UTF-8   ${puml}`;
         exec(command, { cwd: tempDir },(error, stdout, stderr) => {
             console.log(stdout);
             if (error) {

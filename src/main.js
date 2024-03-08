@@ -48,8 +48,12 @@ const debouncedContentChanged = debounce(() => {
     img.src=''
     save_content=content
     render(content,(status,msg)=>{
-        tip.innerHTML=msg
-        img.src=msg;
+        if (!status){
+            tip.innerHTML=msg
+        }else{
+            tip.innerHTML=''
+        }
+        img.src=msg+'?timestamp=' + Date.now();
         console.log(msg);
     })
 }, 1000);

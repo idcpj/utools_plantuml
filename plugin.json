@@ -1,6 +1,6 @@
 {
-   "main": "index.html",
-   "preload": "preload.js",
+   "main": "src/index.html",
+   "preload": "src/preload.js",
    "logo": "logo.png",
   "features": [
     {
