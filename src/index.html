@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>plantuml</title>
+
+    <style>
+        .box{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin: 0;
+
+            overflow: auto;
+
+        }
+        #edit{
+            padding: 10px;
+            overflow: auto;
+            width:  50%;
+            height:800px ;
+        }
+        .CodeMirror{
+            border: 1px solid #ccc;
+        }
+        .preview{
+            width: 50%;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+
+    <div  class="content" id="edit" >
+
+    </div>
+    <div class="preview">
+        <span id="tip"></span>
+        <img id="preview" src="" alt="">
+    </div>
+</div>
+
+<script>
+
+</script>
+<script  src="../dist/bundle.js"></script>
+</body>
+</html>
