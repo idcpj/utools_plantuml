@@ -16,58 +16,87 @@ const new_bin = path.join(tempDir, `${uniqueFileName}.jar`);
 const puml = path.join(tempDir, `${uniqueFileName}.puml`);
 const png = path.join(tempDir, `${uniqueFileName}.png`);
 
-try {
+const doc=`@startuml
+'https://plantuml.com/sequence-diagram
 
-    fs.copyFile(bin, new_bin, (err) => {
+title:"登录时序图"
+
+autonumber
+
+participant client order 10
+participant server order 30
+
+
+client -> server: 登录
+
+
+@enduml
+
+
+
+
+
+
+`
+
+fs.copyFile(bin, new_bin, (err) => {
+    if (err) {
+        console.error(`Error moving file: ${err.message}`);
+    } else {
+        console.log(new_bin);
+    }
+});
+
+window.render=(html)=> {
+
+    fs.writeFile(puml, html, 'utf8', (err) => {
         if (err) {
-            console.error(`Error moving file: ${err.message}`);
-        } else {
-            console.log(new_bin);
+            preview(false,`Error writing index.html: ${err}`)
         }
+    })
+
+
+    const command = `java -jar ${new_bin}  -charset UTF-8   ${puml}`;
+    exec(command, { cwd: tempDir },(error, stdout, stderr) => {
+        console.log(stdout);
+        if (error) {
+            preview(false,`exec error: ${error}`)
+            return;
+        }
+
+        if (stderr) {
+            preview(false,`stderr: ${stderr}`)
+            return;
+        }
+
+        preview(true,png,html)
+
     });
-
-    window.render=(html,callback)=> {
-
-        html=cleanHTML(html)
-
-        fs.writeFile(puml, html, 'utf8', (err) => {
-            if (err) {
-                callback(false,`Error writing index.html: ${err}`)
-            }
-        })
-
-
-        const command = `java -jar ${new_bin}  -charset UTF-8   ${puml}`;
-        exec(command, { cwd: tempDir },(error, stdout, stderr) => {
-            console.log(stdout);
-            if (error) {
-                callback(false,`exec error: ${error}`)
-                return;
-            }
-
-            if (stderr) {
-                callback(false,`stderr: ${stderr}`)
-                return;
-            }
-
-            callback(true,png)
-
-        });
-    }
-
-
-    function cleanHTML(html) {
-        // 将 `<br>` 转换为 `\n`。
-        html = html.replace(/<br ?\/?>/g, '\n');
-
-        // 过滤掉所有 HTML 标签。
-        html = html.replace(/<.*?>/g, '');
-        html = html.replace(/&gt;/g, '>');
-        html = html.replace(/&lt;/g, '<');
-
-        return html;
-    }
-
-}catch (e){
-    alert(e)
 }
+
+utools.onPluginEnter(({code, type, payload, option}) => {
+    console.log(type);
+    console.log(payload.toString());
+    if (type==='text' ){
+
+        render(doc)
+    }
+    else if(type==='regex'){
+        render(payload.toString())
+    }else if(type==='files' ){
+        if (payload.length>=0 && payload[0].isFile){
+            fs.readFile(payload[0].path,(err,data)=>{
+                if (err){
+                    throw new Error(err)
+                }
+                console.log("fs.readFile ",payload[0].path);
+                console.log(data);
+                render(data.toString())
+            })
+        }
+    }else{
+        throw new Error(`type=${type} 类型不正确,只能是 text 或 file`)
+    }
+
+})
+

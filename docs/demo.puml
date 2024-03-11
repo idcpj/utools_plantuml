@@ -1,0 +1,5 @@
+@startuml
+class PlantUMLPlugin {
+  + showDiagram(diagram: string): void
+}
+@enduml

@@ -10,22 +10,7 @@ const img = document.querySelector("#preview");
 const tip = document.querySelector("#tip");
 
 
-const doc = `@startuml
-'https://plantuml.com/sequence-diagram
-
-title:"登录时序图"
-
-autonumber
-
-participant client order 10
-participant server order 30
-
-
-client -> server: 登录
-
-
-@enduml
-
+let doc = `
 
 
 
@@ -35,6 +20,31 @@ client -> server: 登录
 `
 
 let save_content='';
+
+window.preview=(status,msg,content=null)=>{
+
+    if (content){
+
+        doc=content
+        save_content=content
+        view.dispatch({
+            changes: {
+                from: 0,
+                to: view.state.doc.length,
+                insert: content, // 设置新的内容
+            },
+        });
+    }
+
+    if (!status){
+        tip.innerHTML=msg
+    }else{
+        tip.innerHTML=''
+    }
+    img.src=msg+'?timestamp=' + Date.now();
+    console.log(msg);
+}
+
 
 // 防抖函数处理内容变更
 const debouncedContentChanged = debounce(() => {
@@ -47,15 +57,8 @@ const debouncedContentChanged = debounce(() => {
     tip.innerHTML="渲染中..."
     img.src=''
     save_content=content
-    render(content,(status,msg)=>{
-        if (!status){
-            tip.innerHTML=msg
-        }else{
-            tip.innerHTML=''
-        }
-        img.src=msg+'?timestamp=' + Date.now();
-        console.log(msg);
-    })
+    render(content);
+
 }, 1000);
 
 const view = new EditorView({
@@ -82,7 +85,4 @@ function debounce(func, wait) {
             func.apply(this, args);
         }, wait);
     };
-}
-window.onerror=(e)=>{
-    alert(e)
 }

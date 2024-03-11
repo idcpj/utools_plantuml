@@ -6,7 +6,24 @@
     {
       "code": "uml",
       "explain": "plantuml",
-      "cmds":["uml", "plantuml"]
+      "cmds":[
+        "uml",
+        {
+          "type": "regex",
+          "label": "读取文本内容",
+          "match": "/start/i",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        {
+          "type": "files",
+          "label": "读取文件内容",
+          "fileType": "file",
+          "match": "/*.puml$/",
+          "minLength": 1,
+          "maxLength": 10
+        }
+      ]
     }
   ]
 }
