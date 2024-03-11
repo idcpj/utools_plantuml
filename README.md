@@ -28,6 +28,10 @@ class PlantUMLPlugin {
 @enduml
 ```
 
+## TODO
+- [ ] 多标签显示多个渲染结果
+- [ ] 减少包体积
+
 ## 注意事项
 确保 uTools 已经安装并处于最新状态。
 
