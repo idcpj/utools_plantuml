@@ -11,6 +11,8 @@
 - 使用简洁的 PlantUML 语法创建图表
 - 在 uTools 中即时生成漂亮的图片展示
 - 提供直观且交互式的界面
+- 支持根据文件内容渲染
+- 支持根据剪切版内容渲染
 
 ## 如何使用
 
@@ -36,7 +38,7 @@ class PlantUMLPlugin {
 确保 uTools 已经安装并处于最新状态。
 
 ## PlantUML 官网
-访问 [PlantUML 官网]() 获取更多关于 PlantUML 语法和用法的信息。
+访问 [PlantUML 官网](https://plantuml.com/zh/) 获取更多关于 PlantUML 语法和用法的信息。
 
 
 
